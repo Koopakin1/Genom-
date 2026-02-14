@@ -1,7 +1,7 @@
 """
 Memory — Управление долгосрочной памятью (MemGPT-подход).
 
-Интеграция с ChromaDB для хранения:
+Интеграция с ChromaDB v2 API для хранения:
 - Истории инцидентов (Case Law)
 - Профилей проектов
 - Технического паспорта сервера
@@ -19,13 +19,15 @@ import httpx
 logger = logging.getLogger("genome.memory")
 
 CHROMA_BASE_URL = "http://localhost:8100"
+TENANT = "default_tenant"
+DATABASE = "default_database"
 
 
 @dataclass
 class MemoryEntry:
     """Запись в памяти."""
     content: str
-    category: str  # incident | project | config | decision
+    category: str  # incident | project | config | decision | task_result
     metadata: dict | None = None
     timestamp: float | None = None
 
@@ -37,7 +39,7 @@ class MemoryEntry:
 
 
 class MemoryStore:
-    """Хранилище долгосрочной памяти на базе ChromaDB."""
+    """Хранилище долгосрочной памятью на базе ChromaDB v2 API."""
 
     def __init__(self, base_url: str = CHROMA_BASE_URL, collection_name: str = "genome_memory"):
         self._base_url = base_url.rstrip("/")
@@ -45,18 +47,28 @@ class MemoryStore:
         self._collection_id: str | None = None
 
     async def initialize(self) -> None:
-        """Создать или получить коллекцию."""
-        async with httpx.AsyncClient(base_url=self._base_url, timeout=10) as client:
+        """Создать или получить коллекцию через v2 API."""
+        base = f"{self._base_url}/api/v2/tenants/{TENANT}/databases/{DATABASE}"
+        async with httpx.AsyncClient(timeout=10) as client:
+            # Сначала пробуем получить коллекцию
+            resp = await client.get(f"{base}/collections/{self._collection_name}")
+            if resp.status_code == 200:
+                data = resp.json()
+                self._collection_id = data.get("id")
+                logger.info(f"Коллекция '{self._collection_name}' найдена: {self._collection_id}")
+                return
+
+            # Если не нашли — создаём
             resp = await client.post(
-                "/api/v1/collections",
-                json={"name": self._collection_name, "get_or_create": True},
+                f"{base}/collections",
+                json={"name": self._collection_name},
             )
             if resp.status_code == 200:
                 data = resp.json()
                 self._collection_id = data.get("id")
-                logger.info(f"Коллекция '{self._collection_name}' готова: {self._collection_id}")
+                logger.info(f"Коллекция '{self._collection_name}' создана: {self._collection_id}")
             else:
-                logger.error(f"Ошибка создания коллекции: {resp.status_code} {resp.text}")
+                logger.warning(f"ChromaDB: не удалось создать коллекцию: {resp.status_code} {resp.text}")
 
     async def store(self, entry: MemoryEntry, entry_id: str | None = None) -> str | None:
         """Сохранить запись в память."""
@@ -72,9 +84,10 @@ class MemoryStore:
             "timestamp": str(entry.timestamp),
         }
 
-        async with httpx.AsyncClient(base_url=self._base_url, timeout=10) as client:
+        base = f"{self._base_url}/api/v2/tenants/{TENANT}/databases/{DATABASE}"
+        async with httpx.AsyncClient(timeout=10) as client:
             resp = await client.post(
-                f"/api/v1/collections/{self._collection_id}/add",
+                f"{base}/collections/{self._collection_id}/add",
                 json={
                     "ids": [doc_id],
                     "documents": [entry.content],
@@ -85,7 +98,7 @@ class MemoryStore:
                 logger.debug(f"Память: сохранена запись {doc_id}")
                 return doc_id
             else:
-                logger.error(f"Ошибка записи в память: {resp.text}")
+                logger.warning(f"ChromaDB store error: {resp.status_code}")
                 return None
 
     async def search(self, query: str, n_results: int = 5, category: str | None = None) -> list[dict]:
@@ -95,20 +108,17 @@ class MemoryStore:
         if not self._collection_id:
             return []
 
-        body: dict = {
-            "query_texts": [query],
-            "n_results": n_results,
-        }
+        body: dict = {"query_texts": [query], "n_results": n_results}
         if category:
             body["where"] = {"category": category}
 
-        async with httpx.AsyncClient(base_url=self._base_url, timeout=10) as client:
+        base = f"{self._base_url}/api/v2/tenants/{TENANT}/databases/{DATABASE}"
+        async with httpx.AsyncClient(timeout=10) as client:
             resp = await client.post(
-                f"/api/v1/collections/{self._collection_id}/query",
+                f"{base}/collections/{self._collection_id}/query",
                 json=body,
             )
             if resp.status_code != 200:
-                logger.error(f"Ошибка поиска: {resp.text}")
                 return []
 
             data = resp.json()
@@ -134,13 +144,11 @@ class MemoryStore:
         if not self._collection_id:
             return []
 
-        async with httpx.AsyncClient(base_url=self._base_url, timeout=10) as client:
+        base = f"{self._base_url}/api/v2/tenants/{TENANT}/databases/{DATABASE}"
+        async with httpx.AsyncClient(timeout=10) as client:
             resp = await client.post(
-                f"/api/v1/collections/{self._collection_id}/get",
-                json={
-                    "where": {"category": category},
-                    "limit": limit,
-                },
+                f"{base}/collections/{self._collection_id}/get",
+                json={"where": {"category": category}, "limit": limit},
             )
             if resp.status_code != 200:
                 return []
