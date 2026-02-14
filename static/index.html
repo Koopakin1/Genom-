@@ -4,22 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏙️ ИИ-Полис ГЕНОМ — Панель управления</title>
+    <title>🏙️ ИИ-Полис ГЕНОМ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0a0e17;
             --surface: #131a2b;
             --surface2: #1a2340;
-            --border: #2a3660;
-            --text: #e0e6f0;
-            --text2: #8892b0;
-            --accent: #64ffda;
-            --warn: #ffd866;
-            --danger: #ff5370;
-            --blue: #82aaff;
-            --purple: #c792ea;
-            --green: #c3e88d;
-            --orange: #ff9e64;
+            --border: #1e2d4a;
+            --text: #e2e8f0;
+            --text2: #8892a4;
+            --accent: #38bdf8;
+            --accent2: #818cf8;
+            --green: #34d399;
+            --red: #f87171;
+            --yellow: #fbbf24;
+            --orange: #fb923c;
+            --purple: #a78bfa;
         }
 
         * {
@@ -29,72 +31,38 @@
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
         }
 
-        header {
+        /* Header */
+        .header {
             background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
             border-bottom: 1px solid var(--border);
-            padding: 14px 24px;
+            padding: 16px 24px;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
         }
 
-        header h1 {
-            font-size: 18px;
-            font-weight: 600;
+        .header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        header h1 span {
-            color: var(--accent);
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-ok {
-            background: rgba(100, 255, 218, 0.15);
-            color: var(--accent);
-        }
-
-        .badge-warn {
-            background: rgba(255, 216, 102, 0.15);
-            color: var(--warn);
-        }
-
-        .badge-danger {
-            background: rgba(255, 83, 112, 0.15);
-            color: var(--danger);
-        }
-
-        .dot {
+        .header .status-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .dot-ok {
-            background: var(--accent);
-        }
-
-        .dot-warn {
-            background: var(--warn);
-        }
-
-        .dot-danger {
-            background: var(--danger);
+            background: var(--green);
+            animation: pulse 2s ease-in-out infinite;
+            display: inline-block;
+            margin-right: 8px;
         }
 
         @keyframes pulse {
@@ -105,526 +73,759 @@
             }
 
             50% {
-                opacity: 0.5;
+                opacity: 0.4;
             }
         }
 
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 16px 20px;
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
         }
 
-        .grid {
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text2);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: var(--text);
+            background: var(--surface2);
+        }
+
+        .tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 20px 24px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Cards */
+        .cards {
             display: grid;
-            gap: 14px;
-        }
-
-        .grid-5 {
-            grid-template-columns: repeat(5, 1fr);
-        }
-
-        .grid-3 {
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        .grid-2 {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        @media (max-width: 1100px) {
-            .grid-5 {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 700px) {
-
-            .grid-5,
-            .grid-3,
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 16px;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: transform 0.15s, box-shadow 0.15s;
         }
 
         .card:hover {
-            border-color: rgba(100, 255, 218, 0.3);
-            box-shadow: 0 0 20px rgba(100, 255, 218, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
 
-        .card-title {
+        .card-label {
             font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
             color: var(--text2);
-            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .card-value {
             font-size: 28px;
             font-weight: 700;
-            font-variant-numeric: tabular-nums;
+            margin-top: 4px;
         }
 
         .card-sub {
             font-size: 12px;
             color: var(--text2);
-            margin-top: 3px;
+            margin-top: 4px;
         }
 
-        .bar {
-            height: 5px;
-            background: var(--surface2);
-            border-radius: 3px;
-            margin-top: 8px;
-            overflow: hidden;
+        /* Panels */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
         }
 
-        .bar-fill {
-            height: 100%;
-            border-radius: 3px;
-            transition: width 0.5s ease;
-        }
-
-        .fill-ok {
-            background: linear-gradient(90deg, var(--accent), var(--green));
-        }
-
-        .fill-warn {
-            background: linear-gradient(90deg, var(--warn), var(--orange));
-        }
-
-        .fill-danger {
-            background: linear-gradient(90deg, var(--danger), var(--orange));
-        }
-
-        .section {
+        .panel h3 {
             font-size: 14px;
             font-weight: 600;
-            margin: 20px 0 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-        }
-
-        th {
-            text-align: left;
-            padding: 8px 10px;
-            color: var(--text2);
-            font-weight: 500;
-            border-bottom: 1px solid var(--border);
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        td {
-            padding: 8px 10px;
-            border-bottom: 1px solid rgba(42, 54, 96, 0.4);
-        }
-
-        tr:hover td {
-            background: rgba(42, 54, 96, 0.25);
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 2px 7px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 600;
-        }
-
-        .tag-ok {
-            background: rgba(100, 255, 218, 0.15);
+            margin-bottom: 12px;
             color: var(--accent);
         }
 
-        .tag-err {
-            background: rgba(255, 83, 112, 0.15);
-            color: var(--danger);
+        /* Table */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .tag-role {
-            background: rgba(130, 170, 255, 0.15);
-            color: var(--blue);
+        .table th,
+        .table td {
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .tag-model {
-            background: rgba(199, 146, 234, 0.15);
+        .table th {
+            color: var(--text2);
+            font-weight: 500;
+        }
+
+        .table tr:hover {
+            background: var(--surface2);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-green {
+            background: rgba(52, 211, 153, 0.15);
+            color: var(--green);
+        }
+
+        .badge-red {
+            background: rgba(248, 113, 113, 0.15);
+            color: var(--red);
+        }
+
+        .badge-yellow {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--yellow);
+        }
+
+        .badge-blue {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent);
+        }
+
+        .badge-purple {
+            background: rgba(167, 139, 250, 0.15);
             color: var(--purple);
         }
 
-        .empty {
-            text-align: center;
-            padding: 24px;
-            color: var(--text2);
-            font-style: italic;
-            font-size: 13px;
-        }
-
-        .queue-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(42, 54, 96, 0.4);
-        }
-
-        .queue-name {
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .queue-count {
-            font-variant-numeric: tabular-nums;
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .model-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 7px 0;
-            border-bottom: 1px solid rgba(42, 54, 96, 0.4);
-        }
-
-        .model-name {
-            font-weight: 600;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .model-size {
-            color: var(--text2);
-            font-size: 12px;
-        }
-
-        /* Task Form */
-        .task-form {
+        /* Forms */
+        .form-row {
             display: flex;
             gap: 8px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
-            align-items: flex-end;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .form-group label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: var(--text2);
-            letter-spacing: 0.5px;
-        }
-
-        .form-group input,
-        .form-group select {
-            background: var(--surface2);
+        .input,
+        .select {
+            background: var(--bg);
             border: 1px solid var(--border);
+            border-radius: 8px;
             color: var(--text);
-            padding: 6px 10px;
-            border-radius: 6px;
+            padding: 10px 14px;
             font-size: 13px;
+            font-family: inherit;
             outline: none;
+            transition: border-color 0.2s;
         }
 
-        .form-group input:focus,
-        .form-group select:focus {
+        .input:focus,
+        .select:focus {
             border-color: var(--accent);
         }
 
+        .input {
+            flex: 1;
+            min-width: 200px;
+        }
+
         .btn {
-            background: linear-gradient(135deg, var(--accent), var(--green));
-            color: var(--bg);
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
             border: none;
-            padding: 7px 16px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 12px;
+            border-radius: 8px;
+            color: white;
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
-            white-space: nowrap;
-            transition: opacity 0.2s;
+            transition: opacity 0.2s, transform 0.1s;
         }
 
         .btn:hover {
-            opacity: 0.85;
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
 
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
+        .btn:active {
+            transform: translateY(0);
         }
 
-        #task-result {
+        .btn-sm {
+            padding: 6px 14px;
             font-size: 12px;
-            margin-top: 6px;
-            min-height: 20px;
         }
 
-        #last-updated {
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        /* Search Results */
+        .search-result {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            transition: border-color 0.2s;
+        }
+
+        .search-result:hover {
+            border-color: var(--accent);
+        }
+
+        .search-result .distance {
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .search-result .content {
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .search-result .meta {
             font-size: 11px;
             color: var(--text2);
+            margin-top: 4px;
+        }
+
+        /* Log entries */
+        .log-entry {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .log-time {
+            color: var(--text2);
+            margin-right: 8px;
+        }
+
+        .log-event {
+            color: var(--accent);
+            font-weight: 500;
+            margin-right: 8px;
+        }
+
+        /* Shift timeline */
+        .shift-timeline {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .shift-item {
+            position: relative;
+            padding: 12px 0 12px 20px;
+            border-left: 2px solid var(--border);
+        }
+
+        .shift-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 16px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .shift-item.failed::before {
+            background: var(--red);
+        }
+
+        .shift-item.completed::before {
+            background: var(--green);
+        }
+
+        /* Core memory blocks */
+        .core-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+
+        .core-block h4 {
+            font-size: 12px;
+            color: var(--accent);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .core-block pre {
+            font-size: 12px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--text);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cards {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+        }
+
+        /* Empty state */
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: var(--text2);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
         }
     </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <header>
-        <h1>🏙️ ИИ-Полис <span>ГЕНОМ</span></h1>
-        <div style="display: flex; align-items: center; gap: 14px;">
-            <span id="last-updated"></span>
-            <span id="sys-badge" class="badge badge-ok"><span class="dot dot-ok"></span> ONLINE</span>
-        </div>
-    </header>
+    <div class="header">
+        <h1><span class="status-dot"></span>🏙️ ИИ-Полис ГЕНОМ</h1>
+        <span style="font-size:12px;color:var(--text2)" id="clock"></span>
+    </div>
 
-    <div class="container">
-        <!-- Metrics -->
-        <div class="grid grid-5" style="margin-top: 12px;">
-            <div class="card">
-                <div class="card-title">⚡ CPU</div>
-                <div class="card-value" id="v-cpu">—</div>
-                <div class="card-sub" id="s-cpu"></div>
-                <div class="bar">
-                    <div class="bar-fill fill-ok" id="b-cpu" style="width:0%"></div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-title">🧠 RAM</div>
-                <div class="card-value" id="v-ram">—</div>
-                <div class="card-sub" id="s-ram"></div>
-                <div class="bar">
-                    <div class="bar-fill fill-ok" id="b-ram" style="width:0%"></div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-title">🌡️ CPU Temp</div>
-                <div class="card-value" id="v-temp">—</div>
-                <div class="card-sub" id="s-temp"></div>
-                <div class="bar">
-                    <div class="bar-fill fill-ok" id="b-temp" style="width:0%"></div>
-                </div>
-            </div>
-            <div class="card" id="gpu-card">
-                <div class="card-title">🎮 GPU RX 560</div>
-                <div class="card-value" id="v-gpu">—</div>
-                <div class="card-sub" id="s-gpu"></div>
-                <div class="bar">
-                    <div class="bar-fill fill-ok" id="b-gpu" style="width:0%"></div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-title">💾 Диск</div>
-                <div class="card-value" id="v-disk">—</div>
-                <div class="card-sub" id="s-disk"></div>
-                <div class="bar">
-                    <div class="bar-fill fill-ok" id="b-disk" style="width:0%"></div>
+    <div class="tabs">
+        <div class="tab active" data-tab="monitor">📊 Монитор</div>
+        <div class="tab" data-tab="tasks">📬 Задачи</div>
+        <div class="tab" data-tab="memory">🧠 Память</div>
+        <div class="tab" data-tab="shifts">🔄 Пересменка</div>
+        <div class="tab" data-tab="models">🤖 Модели</div>
+    </div>
+
+    <!-- ========== МОНИТОР ========== -->
+    <div class="tab-content active" id="tab-monitor">
+        <div class="cards" id="metrics-cards"></div>
+
+        <div class="panel">
+            <h3>📋 Последние инциденты</h3>
+            <div id="incidents-list">
+                <div class="empty">
+                    <div class="empty-icon">✅</div>Нет инцидентов
                 </div>
             </div>
         </div>
 
-        <!-- Task Submission -->
-        <div class="section">📨 Отправка задачи</div>
-        <div class="card">
-            <div class="task-form">
-                <div class="form-group">
-                    <label>Роль</label>
-                    <select id="task-role">
-                        <option value="sysadmin">🔧 SysAdmin</option>
-                        <option value="auditor">🔍 Auditor</option>
-                        <option value="economist">📊 Economist</option>
-                        <option value="cleaner">🧹 Cleaner</option>
-                        <option value="mchs">🚒 МЧС</option>
-                    </select>
-                </div>
-                <div class="form-group" style="flex:1; min-width: 200px;">
-                    <label>Задача (JSON payload)</label>
-                    <input type="text" id="task-payload" placeholder='{"action":"check_docker"}'
-                        value='{"action":"check_system"}'>
-                </div>
-                <div class="form-group">
-                    <label>Приоритет</label>
-                    <select id="task-priority">
-                        <option value="export" selected>Export</option>
-                        <option value="critical">Critical</option>
-                        <option value="internal">Internal</option>
-                    </select>
-                </div>
-                <button class="btn" id="task-submit" onclick="submitTask()">▶ Отправить</button>
-            </div>
-            <div id="task-result"></div>
-        </div>
-
-        <!-- Queues + Models -->
-        <div class="grid grid-3" style="margin-top: 14px;">
-            <div class="card">
-                <div class="card-title">📬 Очереди Redis</div>
-                <div id="queues-box">
-                    <div class="empty">Загрузка...</div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-title">🤖 Модели Ollama</div>
-                <div id="models-box">
-                    <div class="empty">Загрузка...</div>
-                </div>
-            </div>
-            <div class="card" id="gpu-detail-card">
-                <div class="card-title">🎮 GPU Детали</div>
-                <div id="gpu-detail-box">
-                    <div class="empty">Загрузка...</div>
+        <div class="panel">
+            <h3>📝 Решения оркестратора</h3>
+            <div id="decisions-list">
+                <div class="empty">
+                    <div class="empty-icon">🤔</div>Нет решений
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Tasks -->
-        <div class="section">📋 Последние задачи</div>
-        <div class="card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Время</th>
-                        <th>ID</th>
-                        <th>Роль</th>
-                        <th>Статус</th>
-                        <th>Время</th>
-                        <th>Стоимость</th>
-                    </tr>
-                </thead>
-                <tbody id="tasks-tb">
-                    <tr>
-                        <td colspan="6" class="empty">Нет задач</td>
-                    </tr>
-                </tbody>
-            </table>
+    <!-- ========== ЗАДАЧИ ========== -->
+    <div class="tab-content" id="tab-tasks">
+        <div class="panel">
+            <h3>➕ Отправить задачу</h3>
+            <div class="form-row">
+                <select class="select" id="task-role">
+                    <option value="sysadmin">🛠 Сисадмин</option>
+                    <option value="auditor">🛡 Аудитор</option>
+                    <option value="economist">📊 Экономист</option>
+                    <option value="cleaner">🧹 Уборщик</option>
+                    <option value="mchs">🚒 МЧС</option>
+                </select>
+                <select class="select" id="task-priority">
+                    <option value="internal">🔵 Internal</option>
+                    <option value="export">🟡 Export</option>
+                    <option value="critical">🔴 Critical</option>
+                </select>
+                <input class="input" id="task-payload" placeholder="Описание задачи..."
+                    value='{"action":"check_docker"}'>
+                <button class="btn" onclick="submitTask()">Отправить</button>
+            </div>
+            <div id="task-result" style="font-size:12px;color:var(--text2);margin-top:8px"></div>
         </div>
 
-        <!-- Incidents -->
-        <div class="section">🚨 Инциденты</div>
-        <div class="card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Время</th>
-                        <th>Тип</th>
-                        <th>Описание</th>
-                    </tr>
-                </thead>
-                <tbody id="inc-tb">
-                    <tr>
-                        <td colspan="3" class="empty">Нет инцидентов — всё спокойно 🟢</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="panel">
+            <h3>📊 Очереди</h3>
+            <div id="queues-display"></div>
+        </div>
+
+        <div class="panel">
+            <h3>📜 История задач</h3>
+            <div id="tasks-log"></div>
+        </div>
+    </div>
+
+    <!-- ========== ПАМЯТЬ ========== -->
+    <div class="tab-content" id="tab-memory">
+        <div class="panel">
+            <h3>🔍 Семантический поиск (Archival Memory)</h3>
+            <div class="form-row">
+                <input class="input" id="mem-query" placeholder="Поиск по памяти... (напр. 'проблемы с RAM')" />
+                <select class="select" id="mem-category" style="min-width:140px">
+                    <option value="">Все категории</option>
+                    <option value="incident">🚨 Инциденты</option>
+                    <option value="task_result">✅ Результаты</option>
+                    <option value="decision">🤔 Решения</option>
+                    <option value="config">⚙️ Конфиг</option>
+                </select>
+                <button class="btn" onclick="searchMemory()">Искать</button>
+            </div>
+            <div id="search-results"></div>
+        </div>
+
+        <div class="panel">
+            <h3>💾 Core Memory (всегда в промпте)</h3>
+            <div id="core-memory-display">
+                <div class="empty">
+                    <div class="empty-icon">💾</div>Загрузка...
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>📼 Recall Memory (последние события)</h3>
+            <div id="recall-display">
+                <div class="empty">
+                    <div class="empty-icon">📼</div>Загрузка...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== ПЕРЕСМЕНКА ========== -->
+    <div class="tab-content" id="tab-shifts">
+        <div class="panel">
+            <h3>🔄 Выполнить пересменку</h3>
+            <p style="font-size:12px;color:var(--text2);margin-bottom:12px">
+                Протокол пересменки: Валидация модели → Передача контекста → Тестовый промпт → Подтверждение
+            </p>
+            <div class="form-row">
+                <select class="select" id="shift-role">
+                    <option value="sysadmin">🛠 Сисадмин</option>
+                    <option value="auditor">🛡 Аудитор</option>
+                    <option value="economist">📊 Экономист</option>
+                    <option value="cleaner">🧹 Уборщик</option>
+                    <option value="mchs">🚒 МЧС</option>
+                </select>
+                <button class="btn" onclick="executeShift()">Выполнить пересменку</button>
+            </div>
+            <div id="shift-result" style="margin-top:12px"></div>
+        </div>
+
+        <div class="panel">
+            <h3>📜 История пересменок</h3>
+            <div id="shifts-history">
+                <div class="empty">
+                    <div class="empty-icon">🔄</div>Нет пересменок
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== МОДЕЛИ ========== -->
+    <div class="tab-content" id="tab-models">
+        <div class="panel">
+            <h3>🤖 Модели Ollama</h3>
+            <div id="models-display">
+                <div class="empty">
+                    <div class="empty-icon">🤖</div>Загрузка...
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        function fl(p) { return p > 85 ? 'fill-danger' : p > 70 ? 'fill-warn' : 'fill-ok' }
-        function ft(ts) { if (!ts) return '—'; const d = new Date(parseFloat(ts) * 1000); return d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) }
-        async function fj(u) { try { const r = await fetch(u); return await r.json() } catch { return null } }
+        const API = '';
 
-        async function updateStatus() {
-            const d = await fj('/api/status'); if (!d) return;
-            const set = (id, v) => { document.getElementById(id).textContent = v };
-            const bar = (id, p) => { const e = document.getElementById(id); e.style.width = p + '%'; e.className = 'bar-fill ' + fl(p) };
+        // === Tabs ===
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+            });
+        });
 
-            set('v-cpu', d.cpu_percent + '%'); set('s-cpu', Math.round(d.cpu_freq_mhz) + ' МГц | Load: ' + d.load_avg.map(v => v.toFixed(1)).join('/')); bar('b-cpu', d.cpu_percent);
-            set('v-ram', d.ram_percent + '%'); set('s-ram', d.ram_used_mb + ' / ' + d.ram_total_mb + ' МБ'); bar('b-ram', d.ram_percent);
-            set('v-temp', d.cpu_temp ? d.cpu_temp + '°C' : 'N/A'); set('s-temp', 'CPU'); if (d.cpu_temp) bar('b-temp', d.cpu_temp);
-            set('v-disk', d.disk_percent + '%'); set('s-disk', d.disk_used_gb + ' / ' + d.disk_total_gb + ' ГБ'); bar('b-disk', d.disk_percent);
+        // === Clock ===
+        function updateClock() {
+            document.getElementById('clock').textContent = new Date().toLocaleTimeString('ru-RU');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-            // GPU
-            if (d.gpu) {
-                const g = d.gpu;
-                if (g.gpu_percent !== undefined) { set('v-gpu', g.gpu_percent + '%'); bar('b-gpu', g.gpu_percent); }
-                else if (g.vram_percent !== undefined) { set('v-gpu', g.vram_percent + '%'); bar('b-gpu', g.vram_percent); }
-                set('s-gpu', g.temp_celsius ? g.temp_celsius + '°C | ' + (g.freq_mhz || '?') + 'MHz' : 'RX 560');
+        // === API Helpers ===
+        async function fetchJSON(url) {
+            try { const r = await fetch(API + url); return await r.json(); } catch (e) { return null; }
+        }
+        async function postJSON(url, data) {
+            try {
+                const r = await fetch(API + url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                return await r.json();
+            } catch (e) { return { error: e.message }; }
+        }
 
-                // GPU details
-                let details = '';
-                if (g.vram_used_mb !== undefined) details += `<div class="queue-row"><span class="queue-name">VRAM</span><span>${Math.round(g.vram_used_mb)}/${Math.round(g.vram_total_mb)} МБ</span></div>`;
-                if (g.temp_celsius !== undefined) details += `<div class="queue-row"><span class="queue-name">🌡️ Температура</span><span>${g.temp_celsius}°C</span></div>`;
-                if (g.freq_mhz !== undefined) details += `<div class="queue-row"><span class="queue-name">⚡ Частота</span><span>${g.freq_mhz} МГц</span></div>`;
-                if (g.gpu_percent !== undefined) details += `<div class="queue-row"><span class="queue-name">📈 Загрузка</span><span>${g.gpu_percent}%</span></div>`;
-                if (g.fan_rpm !== undefined) details += `<div class="queue-row"><span class="queue-name">🌀 Вентилятор</span><span>${g.fan_rpm} RPM</span></div>`;
-                document.getElementById('gpu-detail-box').innerHTML = details || '<div class="empty">Нет данных GPU</div>';
+        // === Monitor ===
+        async function refreshMonitor() {
+            const s = await fetchJSON('/api/status');
+            if (!s) return;
+            let html = '';
+            html += metricCard('CPU', s.cpu_percent + '%', `${s.cpu_freq_mhz} MHz`, s.cpu_percent > 80 ? '--red' : '--green');
+            html += metricCard('RAM', s.ram_percent + '%', `${s.ram_used_mb}/${s.ram_total_mb} MB`, s.ram_percent > 85 ? '--red' : s.ram_percent > 70 ? '--yellow' : '--green');
+            html += metricCard('Temp', (s.cpu_temp || '-') + '°C', 'CPU', (s.cpu_temp || 0) > 80 ? '--red' : '--green');
+            html += metricCard('Disk', s.disk_percent + '%', `${s.disk_used_gb}/${s.disk_total_gb} GB`, s.disk_percent > 85 ? '--red' : '--green');
+            if (s.gpu) {
+                html += metricCard('GPU', (s.gpu.gpu_percent || '-') + '%', s.gpu.name, '--purple');
+                if (s.gpu.vram_percent != null) html += metricCard('VRAM', s.gpu.vram_percent + '%', `${Math.round(s.gpu.vram_used_mb)}/${Math.round(s.gpu.vram_total_mb)} MB`, '--accent2');
+                if (s.gpu.temp_celsius != null) html += metricCard('GPU°C', s.gpu.temp_celsius + '°C', 'GPU Temp', s.gpu.temp_celsius > 80 ? '--red' : '--green');
+            }
+            document.getElementById('metrics-cards').innerHTML = html;
+        }
+
+        function metricCard(label, value, sub, color) {
+            return `<div class="card"><div class="card-label">${label}</div><div class="card-value" style="color:var(${color})">${value}</div><div class="card-sub">${sub}</div></div>`;
+        }
+
+        async function refreshLogs() {
+            const data = await fetchJSON('/api/logs');
+            if (!data) return;
+            if (data.incidents && data.incidents.length) {
+                document.getElementById('incidents-list').innerHTML = data.incidents.map(e =>
+                    `<div class="log-entry"><span class="log-time">${e.timestamp || ''}</span><span style="color:var(--red)">${e.content || JSON.stringify(e)}</span></div>`
+                ).join('');
+            }
+            if (data.decisions && data.decisions.length) {
+                document.getElementById('decisions-list').innerHTML = data.decisions.map(e =>
+                    `<div class="log-entry"><span class="log-time">${e.timestamp || ''}</span>${e.content || JSON.stringify(e)}</div>`
+                ).join('');
+            }
+        }
+
+        // === Tasks ===
+        async function submitTask() {
+            const role = document.getElementById('task-role').value;
+            const priority = document.getElementById('task-priority').value;
+            let payload;
+            try { payload = JSON.parse(document.getElementById('task-payload').value); }
+            catch { payload = { message: document.getElementById('task-payload').value }; }
+
+            const result = await postJSON('/api/task', { type: role, payload, priority });
+            const el = document.getElementById('task-result');
+            if (result.success) {
+                el.innerHTML = `<span style="color:var(--green)">✅ ${result.message} (${result.priority})</span>`;
             } else {
-                set('v-gpu', 'N/A'); set('s-gpu', 'Не обнаружена');
-                document.getElementById('gpu-detail-box').innerHTML = '<div class="empty">GPU не обнаружена</div>';
+                el.innerHTML = `<span style="color:var(--red)">❌ ${result.error || 'Ошибка'}</span>`;
+            }
+            refreshQueues();
+        }
+
+        async function refreshQueues() {
+            const data = await fetchJSON('/api/queues');
+            if (!data) return;
+            if (data.connected && data.queues) {
+                let html = '<div class="cards">';
+                for (const [q, count] of Object.entries(data.queues)) {
+                    const color = count > 0 ? '--yellow' : '--green';
+                    html += metricCard(q, count, 'задач', color);
+                }
+                html += '</div>';
+                document.getElementById('queues-display').innerHTML = html;
+            }
+        }
+
+        async function refreshTasksLog() {
+            const data = await fetchJSON('/api/logs');
+            if (!data || !data.tasks || !data.tasks.length) return;
+            let html = '<table class="table"><tr><th>Время</th><th>Задача</th></tr>';
+            data.tasks.slice(0, 15).forEach(t => {
+                html += `<tr><td style="color:var(--text2)">${t.timestamp || ''}</td><td>${t.content || JSON.stringify(t)}</td></tr>`;
+            });
+            html += '</table>';
+            document.getElementById('tasks-log').innerHTML = html;
+        }
+
+        // === Memory ===
+        async function searchMemory() {
+            const query = document.getElementById('mem-query').value;
+            if (!query) return;
+            const category = document.getElementById('mem-category').value || undefined;
+            const container = document.getElementById('search-results');
+            container.innerHTML = '<div style="color:var(--text2);padding:12px">🔍 Ищу...</div>';
+
+            const data = await postJSON('/api/memory/search', { query, n_results: 10, category });
+            if (!data || data.error) {
+                container.innerHTML = `<div style="color:var(--red);padding:12px">❌ ${data?.error || 'Ошибка'}</div>`;
+                return;
+            }
+            if (!data.results || !data.results.length) {
+                container.innerHTML = '<div class="empty"><div class="empty-icon">🔍</div>Ничего не найдено</div>';
+                return;
+            }
+            container.innerHTML = data.results.map((r, i) => {
+                const dist = r.distance != null ? r.distance.toFixed(3) : '?';
+                const cat = r.metadata?.category || '';
+                const catBadge = cat ? `<span class="badge badge-blue">${cat}</span>` : '';
+                return `<div class="search-result">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <span class="distance">📐 distance: ${dist}</span>
+                        ${catBadge}
+                    </div>
+                    <div class="content">${r.content || ''}</div>
+                    <div class="meta">${r.id || ''}</div>
+                </div>`;
+            }).join('');
+        }
+
+        async function refreshCoreMemory() {
+            const data = await fetchJSON('/api/memory/core');
+            if (!data || data.error) return;
+            const core = data.core || {};
+            let html = '';
+            for (const [key, value] of Object.entries(core)) {
+                html += `<div class="core-block"><h4>${key}</h4><pre>${value}</pre></div>`;
+            }
+            document.getElementById('core-memory-display').innerHTML = html || '<div class="empty">Пусто</div>';
+        }
+
+        async function refreshRecall() {
+            const data = await fetchJSON('/api/memory/recall');
+            if (!data || data.error || !data.events || !data.events.length) {
+                document.getElementById('recall-display').innerHTML = '<div class="empty"><div class="empty-icon">📼</div>Нет событий</div>';
+                return;
+            }
+            let html = '';
+            data.events.forEach(e => {
+                const ts = e.timestamp ? new Date(parseFloat(e.timestamp) * 1000).toLocaleTimeString('ru-RU') : '';
+                html += `<div class="log-entry"><span class="log-time">${ts}</span><span class="log-event">${e.event || ''}</span>${e.content || ''}</div>`;
+            });
+            document.getElementById('recall-display').innerHTML = html;
+        }
+
+        // === Shifts ===
+        async function executeShift() {
+            const role = document.getElementById('shift-role').value;
+            const container = document.getElementById('shift-result');
+            container.innerHTML = '<div style="color:var(--yellow);padding:8px">🔄 Выполняю пересменку... (10-60 сек)</div>';
+
+            const data = await postJSON('/api/shift', { to_role: role });
+            if (data.success) {
+                container.innerHTML = `<div style="background:rgba(52,211,153,0.1);border:1px solid var(--green);border-radius:8px;padding:12px">
+                    <b style="color:var(--green)">✅ Пересменка выполнена</b><br>
+                    <span style="font-size:12px;color:var(--text2)">${data.from_role} → ${data.to_role} за ${data.duration_sec}с</span>
+                </div>`;
+            } else {
+                container.innerHTML = `<div style="background:rgba(248,113,113,0.1);border:1px solid var(--red);border-radius:8px;padding:12px">
+                    <b style="color:var(--red)">❌ ${data.error || 'Ошибка'}</b><br>
+                    <span style="font-size:12px;color:var(--text2)">${data.from_role || ''} → ${data.to_role || ''}</span>
+                </div>`;
+            }
+            refreshShiftsHistory();
+        }
+
+        async function refreshShiftsHistory() {
+            const data = await fetchJSON('/api/shifts');
+            if (!data) return;
+            const container = document.getElementById('shifts-history');
+
+            if (!data.history || !data.history.length) {
+                container.innerHTML = `<div style="margin-bottom:12px"><span class="badge badge-blue">Текущая роль: ${data.current_role || 'none'}</span></div>
+                    <div class="empty"><div class="empty-icon">🔄</div>Нет пересменок</div>`;
+                return;
             }
 
-            // Badge
-            const b = document.getElementById('sys-badge');
-            if (d.is_critical) { b.className = 'badge badge-danger'; b.innerHTML = '<span class="dot dot-danger"></span> CRITICAL'; }
-            else if (d.is_warning) { b.className = 'badge badge-warn'; b.innerHTML = '<span class="dot dot-warn"></span> WARNING'; }
-            else { b.className = 'badge badge-ok'; b.innerHTML = '<span class="dot dot-ok"></span> ONLINE'; }
-            document.getElementById('last-updated').textContent = 'Обновлено: ' + new Date().toLocaleTimeString('ru-RU');
+            let html = `<div style="margin-bottom:12px"><span class="badge badge-green">Текущая роль: ${data.current_role}</span></div>`;
+            html += '<div class="shift-timeline">';
+            data.history.forEach(s => {
+                const cls = s.status === 'completed' ? 'completed' : s.status === 'failed' ? 'failed' : '';
+                const icon = s.status === 'completed' ? '✅' : '❌';
+                html += `<div class="shift-item ${cls}">
+                    <div><b>${s.from_role}</b> → <b>${s.to_role}</b> ${icon}</div>
+                    <div style="font-size:12px;color:var(--text2)">${s.duration_sec}с | Валидация: ${s.validation_ok ? '✅' : '❌'} | Тест: ${s.test_ok ? '✅' : '❌'}</div>
+                    ${s.error ? `<div style="font-size:12px;color:var(--red)">${s.error}</div>` : ''}
+                </div>`;
+            });
+            html += '</div>';
+            container.innerHTML = html;
         }
 
-        async function updateQueues() {
-            const d = await fj('/api/queues'); const c = document.getElementById('queues-box');
-            if (!d || !d.connected) { c.innerHTML = '<div class="empty">❌ Redis недоступен</div>'; return; }
-            const icons = { CRITICAL: '🔴', EXPORT: '🟡', INTERNAL: '🔵' };
-            c.innerHTML = Object.entries(d.queues).map(([n, v]) => `<div class="queue-row"><span class="queue-name">${icons[n] || '⬜'} ${n}</span><span class="queue-count">${v}</span></div>`).join('');
+        // === Models ===
+        async function refreshModels() {
+            const data = await fetchJSON('/api/models');
+            if (!data || !data.models) return;
+            let html = '<table class="table"><tr><th>Модель</th><th>Размер</th></tr>';
+            data.models.forEach(m => {
+                const isRole = m.name.startsWith('genome-');
+                const badge = isRole ? '<span class="badge badge-purple" style="margin-left:8px">роль</span>' : '';
+                html += `<tr><td>${m.name}${badge}</td><td>${m.size_gb} GB</td></tr>`;
+            });
+            html += '</table>';
+            document.getElementById('models-display').innerHTML = html;
         }
 
-        async function updateModels() {
-            const d = await fj('/api/models'); const c = document.getElementById('models-box');
-            if (!d || !d.connected) { c.innerHTML = '<div class="empty">❌ Ollama недоступен</div>'; return; }
-            if (!d.models.length) { c.innerHTML = '<div class="empty">Нет моделей</div>'; return; }
-            c.innerHTML = d.models.map(m => `<div class="model-item"><span class="model-name"><span class="tag tag-model">${m.name.startsWith('genome-') ? 'ROLE' : 'BASE'}</span> ${m.name}</span><span class="model-size">${m.size_gb} ГБ</span></div>`).join('');
+        // === Init & Refresh ===
+        async function refreshAll() {
+            refreshMonitor();
+            refreshLogs();
+            refreshQueues();
+            refreshTasksLog();
         }
 
-        async function updateLogs() {
-            const d = await fj('/api/logs'); if (!d) return;
-            const tb = document.getElementById('tasks-tb');
-            if (!d.tasks.length) { tb.innerHTML = '<tr><td colspan="6" class="empty">Нет задач</td></tr>'; }
-            else { tb.innerHTML = d.tasks.map(t => { const ok = t.event === 'task_completed'; return `<tr><td>${ft(t.timestamp)}</td><td><code style="font-size:11px">${t.task_id || '—'}</code></td><td>${t.role ? `<span class="tag tag-role">${t.role}</span>` : '—'}</td><td><span class="tag ${ok ? 'tag-ok' : 'tag-err'}">${ok ? '✅ OK' : '❌ FAIL'}</span></td><td>${t.duration_sec ? t.duration_sec.toFixed(1) + 's' : '—'}</td><td>${t.cost ? t.cost.toFixed(1) + ' U' : '—'}</td></tr>` }).join(''); }
-            const ib = document.getElementById('inc-tb');
-            if (!d.incidents.length) { ib.innerHTML = '<tr><td colspan="3" class="empty">Нет инцидентов — всё спокойно 🟢</td></tr>'; }
-            else { ib.innerHTML = d.incidents.map(i => `<tr><td>${ft(i.timestamp)}</td><td><span class="tag tag-err">${i.event || '—'}</span></td><td>${i.error || i.summary || JSON.stringify(i).substring(0, 80)}</td></tr>`).join(''); }
-        }
+        refreshAll();
+        refreshCoreMemory();
+        refreshRecall();
+        refreshShiftsHistory();
+        refreshModels();
 
-        async function submitTask() {
-            const btn = document.getElementById('task-submit'); const res = document.getElementById('task-result');
-            btn.disabled = true; res.textContent = '⏳ Отправка...'; res.style.color = '';;
-            try {
-                let payload; try { payload = JSON.parse(document.getElementById('task-payload').value); } catch { payload = { message: document.getElementById('task-payload').value }; }
-                const resp = await fetch('/api/task', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ type: document.getElementById('task-role').value, payload, priority: document.getElementById('task-priority').value })
-                });
-                const d = await resp.json();
-                if (d.success) { res.textContent = `✅ ${d.task_id} в очередь ${d.priority.toUpperCase()}`; res.style.color = 'var(--accent)'; setTimeout(refresh, 2000); }
-                else { res.textContent = '❌ ' + d.error; res.style.color = 'var(--danger)'; }
-            } catch (e) { res.textContent = '❌ ' + e; res.style.color = 'var(--danger)'; }
-            btn.disabled = false;
-        }
+        setInterval(refreshAll, 5000);
+        setInterval(refreshRecall, 10000);
+        setInterval(refreshShiftsHistory, 15000);
 
-        async function refresh() { await Promise.all([updateStatus(), updateQueues(), updateModels(), updateLogs()]); }
-        refresh(); setInterval(refresh, 5000);
+        // Enter key for search
+        document.getElementById('mem-query').addEventListener('keydown', e => {
+            if (e.key === 'Enter') searchMemory();
+        });
     </script>
 </body>
 
