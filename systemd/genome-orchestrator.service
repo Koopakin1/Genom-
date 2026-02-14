@@ -1,0 +1,24 @@
+[Unit]
+Description=ГЕНОМ Orchestrator — Мозг Администрации ИИ-Полиса
+After=docker.service network-online.target
+Requires=docker.service
+Wants=genome-dashboard.service genome-watchdog.service
+
+[Service]
+Type=simple
+User=fedr
+WorkingDirectory=/home/fedr/openclaw/genome
+ExecStart=/usr/bin/python3 /home/fedr/openclaw/genome/run.py
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=genome-orchestrator
+Environment="PYTHONPATH=/home/fedr/openclaw/genome"
+
+# Ждём Docker-контейнеры
+ExecStartPre=/bin/bash -c "docker compose -f /home/fedr/openclaw/genome/docker-compose.yml up -d"
+ExecStartPre=/bin/sleep 5
+
+[Install]
+WantedBy=multi-user.target

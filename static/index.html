@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,25 +19,41 @@
             --blue: #82aaff;
             --purple: #c792ea;
             --green: #c3e88d;
+            --orange: #ff9e64;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
         }
+
         header {
             background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
             border-bottom: 1px solid var(--border);
-            padding: 16px 24px;
+            padding: 14px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        header h1 { font-size: 20px; font-weight: 600; }
-        header h1 span { color: var(--accent); }
-        .status-badge {
+
+        header h1 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        header h1 span {
+            color: var(--accent);
+        }
+
+        .badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -45,64 +62,154 @@
             font-size: 12px;
             font-weight: 600;
         }
-        .status-ok { background: rgba(100, 255, 218, 0.15); color: var(--accent); }
-        .status-warn { background: rgba(255, 216, 102, 0.15); color: var(--warn); }
-        .status-danger { background: rgba(255, 83, 112, 0.15); color: var(--danger); }
-        .dot { width: 8px; height: 8px; border-radius: 50%; animation: pulse 2s infinite; }
-        .dot-ok { background: var(--accent); }
-        .dot-warn { background: var(--warn); }
-        .dot-danger { background: var(--danger); }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .grid { display: grid; gap: 16px; }
-        .grid-4 { grid-template-columns: repeat(4, 1fr); }
-        .grid-2 { grid-template-columns: repeat(2, 1fr); }
-        @media (max-width: 900px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px) { .grid-4, .grid-2 { grid-template-columns: 1fr; } }
+        .badge-ok {
+            background: rgba(100, 255, 218, 0.15);
+            color: var(--accent);
+        }
+
+        .badge-warn {
+            background: rgba(255, 216, 102, 0.15);
+            color: var(--warn);
+        }
+
+        .badge-danger {
+            background: rgba(255, 83, 112, 0.15);
+            color: var(--danger);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .dot-ok {
+            background: var(--accent);
+        }
+
+        .dot-warn {
+            background: var(--warn);
+        }
+
+        .dot-danger {
+            background: var(--danger);
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px 20px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        .grid-5 {
+            grid-template-columns: repeat(5, 1fr);
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: 1100px) {
+            .grid-5 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .grid-5,
+            .grid-3,
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
 
         .card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            transition: border-color 0.2s;
+            border-radius: 10px;
+            padding: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .card:hover { border-color: var(--accent); }
+
+        .card:hover {
+            border-color: rgba(100, 255, 218, 0.3);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.05);
+        }
+
         .card-title {
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text2);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
+
         .card-value {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
             font-variant-numeric: tabular-nums;
         }
-        .card-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
 
-        .progress-bar {
-            height: 6px;
+        .card-sub {
+            font-size: 12px;
+            color: var(--text2);
+            margin-top: 3px;
+        }
+
+        .bar {
+            height: 5px;
             background: var(--surface2);
             border-radius: 3px;
-            margin-top: 10px;
+            margin-top: 8px;
             overflow: hidden;
         }
-        .progress-fill {
+
+        .bar-fill {
             height: 100%;
             border-radius: 3px;
             transition: width 0.5s ease;
         }
-        .fill-ok { background: linear-gradient(90deg, var(--accent), var(--green)); }
-        .fill-warn { background: linear-gradient(90deg, var(--warn), #ff9e64); }
-        .fill-danger { background: linear-gradient(90deg, var(--danger), #ff9e64); }
 
-        .section-title {
-            font-size: 16px;
+        .fill-ok {
+            background: linear-gradient(90deg, var(--accent), var(--green));
+        }
+
+        .fill-warn {
+            background: linear-gradient(90deg, var(--warn), var(--orange));
+        }
+
+        .fill-danger {
+            background: linear-gradient(90deg, var(--danger), var(--orange));
+        }
+
+        .section {
+            font-size: 14px;
             font-weight: 600;
-            margin: 24px 0 12px;
+            margin: 20px 0 10px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -111,149 +218,310 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font-size: 12px;
         }
+
         th {
             text-align: left;
-            padding: 10px 12px;
+            padding: 8px 10px;
             color: var(--text2);
             font-weight: 500;
             border-bottom: 1px solid var(--border);
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
         td {
-            padding: 10px 12px;
-            border-bottom: 1px solid rgba(42, 54, 96, 0.5);
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(42, 54, 96, 0.4);
         }
-        tr:hover td { background: rgba(42, 54, 96, 0.3); }
+
+        tr:hover td {
+            background: rgba(42, 54, 96, 0.25);
+        }
 
         .tag {
             display: inline-block;
-            padding: 2px 8px;
+            padding: 2px 7px;
             border-radius: 4px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
         }
-        .tag-success { background: rgba(100, 255, 218, 0.15); color: var(--accent); }
-        .tag-error { background: rgba(255, 83, 112, 0.15); color: var(--danger); }
-        .tag-role { background: rgba(130, 170, 255, 0.15); color: var(--blue); }
-        .tag-model { background: rgba(199, 146, 234, 0.15); color: var(--purple); }
 
-        .empty-state {
+        .tag-ok {
+            background: rgba(100, 255, 218, 0.15);
+            color: var(--accent);
+        }
+
+        .tag-err {
+            background: rgba(255, 83, 112, 0.15);
+            color: var(--danger);
+        }
+
+        .tag-role {
+            background: rgba(130, 170, 255, 0.15);
+            color: var(--blue);
+        }
+
+        .tag-model {
+            background: rgba(199, 146, 234, 0.15);
+            color: var(--purple);
+        }
+
+        .empty {
             text-align: center;
-            padding: 32px;
+            padding: 24px;
             color: var(--text2);
             font-style: italic;
+            font-size: 13px;
         }
 
         .queue-row {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(42, 54, 96, 0.5);
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(42, 54, 96, 0.4);
         }
-        .queue-name { font-weight: 600; }
+
+        .queue-name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
         .queue-count {
             font-variant-numeric: tabular-nums;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .model-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(42, 54, 96, 0.5);
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(42, 54, 96, 0.4);
         }
-        .model-name { font-weight: 600; font-size: 14px; }
-        .model-size { color: var(--text2); font-size: 13px; }
 
-        #last-updated { font-size: 11px; color: var(--text2); }
+        .model-name {
+            font-weight: 600;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .model-size {
+            color: var(--text2);
+            font-size: 12px;
+        }
+
+        /* Task Form */
+        .task-form {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text2);
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--accent);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent), var(--green));
+            color: var(--bg);
+            border: none;
+            padding: 7px 16px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        #task-result {
+            font-size: 12px;
+            margin-top: 6px;
+            min-height: 20px;
+        }
+
+        #last-updated {
+            font-size: 11px;
+            color: var(--text2);
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header>
         <h1>🏙️ ИИ-Полис <span>ГЕНОМ</span></h1>
-        <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
             <span id="last-updated"></span>
-            <span id="system-badge" class="status-badge status-ok">
-                <span class="dot dot-ok"></span> ONLINE
-            </span>
+            <span id="sys-badge" class="badge badge-ok"><span class="dot dot-ok"></span> ONLINE</span>
         </div>
     </header>
 
     <div class="container">
-        <!-- Metrics Cards -->
-        <div class="grid grid-4" style="margin-top: 16px;">
+        <!-- Metrics -->
+        <div class="grid grid-5" style="margin-top: 12px;">
             <div class="card">
                 <div class="card-title">⚡ CPU</div>
-                <div class="card-value" id="cpu-value">—</div>
-                <div class="card-sub" id="cpu-freq"></div>
-                <div class="progress-bar"><div class="progress-fill fill-ok" id="cpu-bar" style="width: 0%"></div></div>
+                <div class="card-value" id="v-cpu">—</div>
+                <div class="card-sub" id="s-cpu"></div>
+                <div class="bar">
+                    <div class="bar-fill fill-ok" id="b-cpu" style="width:0%"></div>
+                </div>
             </div>
             <div class="card">
                 <div class="card-title">🧠 RAM</div>
-                <div class="card-value" id="ram-value">—</div>
-                <div class="card-sub" id="ram-sub"></div>
-                <div class="progress-bar"><div class="progress-fill fill-ok" id="ram-bar" style="width: 0%"></div></div>
+                <div class="card-value" id="v-ram">—</div>
+                <div class="card-sub" id="s-ram"></div>
+                <div class="bar">
+                    <div class="bar-fill fill-ok" id="b-ram" style="width:0%"></div>
+                </div>
             </div>
             <div class="card">
-                <div class="card-title">🌡️ Температура</div>
-                <div class="card-value" id="temp-value">—</div>
-                <div class="card-sub" id="temp-sub"></div>
-                <div class="progress-bar"><div class="progress-fill fill-ok" id="temp-bar" style="width: 0%"></div></div>
+                <div class="card-title">🌡️ CPU Temp</div>
+                <div class="card-value" id="v-temp">—</div>
+                <div class="card-sub" id="s-temp"></div>
+                <div class="bar">
+                    <div class="bar-fill fill-ok" id="b-temp" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="card" id="gpu-card">
+                <div class="card-title">🎮 GPU RX 560</div>
+                <div class="card-value" id="v-gpu">—</div>
+                <div class="card-sub" id="s-gpu"></div>
+                <div class="bar">
+                    <div class="bar-fill fill-ok" id="b-gpu" style="width:0%"></div>
+                </div>
             </div>
             <div class="card">
                 <div class="card-title">💾 Диск</div>
-                <div class="card-value" id="disk-value">—</div>
-                <div class="card-sub" id="disk-sub"></div>
-                <div class="progress-bar"><div class="progress-fill fill-ok" id="disk-bar" style="width: 0%"></div></div>
+                <div class="card-value" id="v-disk">—</div>
+                <div class="card-sub" id="s-disk"></div>
+                <div class="bar">
+                    <div class="bar-fill fill-ok" id="b-disk" style="width:0%"></div>
+                </div>
             </div>
         </div>
 
+        <!-- Task Submission -->
+        <div class="section">📨 Отправка задачи</div>
+        <div class="card">
+            <div class="task-form">
+                <div class="form-group">
+                    <label>Роль</label>
+                    <select id="task-role">
+                        <option value="sysadmin">🔧 SysAdmin</option>
+                        <option value="auditor">🔍 Auditor</option>
+                        <option value="economist">📊 Economist</option>
+                        <option value="cleaner">🧹 Cleaner</option>
+                        <option value="mchs">🚒 МЧС</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex:1; min-width: 200px;">
+                    <label>Задача (JSON payload)</label>
+                    <input type="text" id="task-payload" placeholder='{"action":"check_docker"}'
+                        value='{"action":"check_system"}'>
+                </div>
+                <div class="form-group">
+                    <label>Приоритет</label>
+                    <select id="task-priority">
+                        <option value="export" selected>Export</option>
+                        <option value="critical">Critical</option>
+                        <option value="internal">Internal</option>
+                    </select>
+                </div>
+                <button class="btn" id="task-submit" onclick="submitTask()">▶ Отправить</button>
+            </div>
+            <div id="task-result"></div>
+        </div>
+
         <!-- Queues + Models -->
-        <div class="grid grid-2" style="margin-top: 16px;">
+        <div class="grid grid-3" style="margin-top: 14px;">
             <div class="card">
                 <div class="card-title">📬 Очереди Redis</div>
-                <div id="queues-container">
-                    <div class="empty-state">Загрузка...</div>
+                <div id="queues-box">
+                    <div class="empty">Загрузка...</div>
                 </div>
             </div>
             <div class="card">
                 <div class="card-title">🤖 Модели Ollama</div>
-                <div id="models-container">
-                    <div class="empty-state">Загрузка...</div>
+                <div id="models-box">
+                    <div class="empty">Загрузка...</div>
+                </div>
+            </div>
+            <div class="card" id="gpu-detail-card">
+                <div class="card-title">🎮 GPU Детали</div>
+                <div id="gpu-detail-box">
+                    <div class="empty">Загрузка...</div>
                 </div>
             </div>
         </div>
 
-        <!-- Task Log -->
-        <div class="section-title">📋 Последние задачи</div>
+        <!-- Tasks -->
+        <div class="section">📋 Последние задачи</div>
         <div class="card">
             <table>
                 <thead>
                     <tr>
                         <th>Время</th>
-                        <th>Задача</th>
+                        <th>ID</th>
                         <th>Роль</th>
                         <th>Статус</th>
-                        <th>Длительность</th>
+                        <th>Время</th>
                         <th>Стоимость</th>
                     </tr>
                 </thead>
-                <tbody id="tasks-table">
-                    <tr><td colspan="6" class="empty-state">Нет задач</td></tr>
+                <tbody id="tasks-tb">
+                    <tr>
+                        <td colspan="6" class="empty">Нет задач</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
         <!-- Incidents -->
-        <div class="section-title">🚨 Инциденты</div>
+        <div class="section">🚨 Инциденты</div>
         <div class="card">
             <table>
                 <thead>
@@ -263,164 +531,101 @@
                         <th>Описание</th>
                     </tr>
                 </thead>
-                <tbody id="incidents-table">
-                    <tr><td colspan="3" class="empty-state">Нет инцидентов</td></tr>
+                <tbody id="inc-tb">
+                    <tr>
+                        <td colspan="3" class="empty">Нет инцидентов — всё спокойно 🟢</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        const API = '';
-
-        function fillLevel(pct) {
-            if (pct > 85) return 'fill-danger';
-            if (pct > 70) return 'fill-warn';
-            return 'fill-ok';
-        }
-
-        function formatTime(ts) {
-            if (!ts) return '—';
-            const d = new Date(parseFloat(ts) * 1000);
-            return d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        }
-
-        async function fetchJSON(url) {
-            try {
-                const resp = await fetch(API + url);
-                return await resp.json();
-            } catch { return null; }
-        }
+        function fl(p) { return p > 85 ? 'fill-danger' : p > 70 ? 'fill-warn' : 'fill-ok' }
+        function ft(ts) { if (!ts) return '—'; const d = new Date(parseFloat(ts) * 1000); return d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) }
+        async function fj(u) { try { const r = await fetch(u); return await r.json() } catch { return null } }
 
         async function updateStatus() {
-            const data = await fetchJSON('/api/status');
-            if (!data) return;
+            const d = await fj('/api/status'); if (!d) return;
+            const set = (id, v) => { document.getElementById(id).textContent = v };
+            const bar = (id, p) => { const e = document.getElementById(id); e.style.width = p + '%'; e.className = 'bar-fill ' + fl(p) };
 
-            document.getElementById('cpu-value').textContent = data.cpu_percent + '%';
-            document.getElementById('cpu-freq').textContent = Math.round(data.cpu_freq_mhz) + ' МГц';
-            const cpuBar = document.getElementById('cpu-bar');
-            cpuBar.style.width = data.cpu_percent + '%';
-            cpuBar.className = 'progress-fill ' + fillLevel(data.cpu_percent);
+            set('v-cpu', d.cpu_percent + '%'); set('s-cpu', Math.round(d.cpu_freq_mhz) + ' МГц | Load: ' + d.load_avg.map(v => v.toFixed(1)).join('/')); bar('b-cpu', d.cpu_percent);
+            set('v-ram', d.ram_percent + '%'); set('s-ram', d.ram_used_mb + ' / ' + d.ram_total_mb + ' МБ'); bar('b-ram', d.ram_percent);
+            set('v-temp', d.cpu_temp ? d.cpu_temp + '°C' : 'N/A'); set('s-temp', 'CPU'); if (d.cpu_temp) bar('b-temp', d.cpu_temp);
+            set('v-disk', d.disk_percent + '%'); set('s-disk', d.disk_used_gb + ' / ' + d.disk_total_gb + ' ГБ'); bar('b-disk', d.disk_percent);
 
-            document.getElementById('ram-value').textContent = data.ram_percent + '%';
-            document.getElementById('ram-sub').textContent = `${data.ram_used_mb} / ${data.ram_total_mb} МБ`;
-            const ramBar = document.getElementById('ram-bar');
-            ramBar.style.width = data.ram_percent + '%';
-            ramBar.className = 'progress-fill ' + fillLevel(data.ram_percent);
+            // GPU
+            if (d.gpu) {
+                const g = d.gpu;
+                if (g.gpu_percent !== undefined) { set('v-gpu', g.gpu_percent + '%'); bar('b-gpu', g.gpu_percent); }
+                else if (g.vram_percent !== undefined) { set('v-gpu', g.vram_percent + '%'); bar('b-gpu', g.vram_percent); }
+                set('s-gpu', g.temp_celsius ? g.temp_celsius + '°C | ' + (g.freq_mhz || '?') + 'MHz' : 'RX 560');
 
-            const temp = data.cpu_temp;
-            document.getElementById('temp-value').textContent = temp ? temp + '°C' : 'N/A';
-            document.getElementById('temp-sub').textContent = `Load: ${data.load_avg.map(v => v.toFixed(1)).join(' / ')}`;
-            if (temp) {
-                const tempPct = Math.min(temp / 100 * 100, 100);
-                const tempBar = document.getElementById('temp-bar');
-                tempBar.style.width = tempPct + '%';
-                tempBar.className = 'progress-fill ' + fillLevel(tempPct);
-            }
-
-            document.getElementById('disk-value').textContent = data.disk_percent + '%';
-            document.getElementById('disk-sub').textContent = `${data.disk_used_gb} / ${data.disk_total_gb} ГБ`;
-            const diskBar = document.getElementById('disk-bar');
-            diskBar.style.width = data.disk_percent + '%';
-            diskBar.className = 'progress-fill ' + fillLevel(data.disk_percent);
-
-            // System badge
-            const badge = document.getElementById('system-badge');
-            const dot = badge.querySelector('.dot');
-            if (data.is_critical) {
-                badge.className = 'status-badge status-danger';
-                dot.className = 'dot dot-danger';
-                badge.innerHTML = '<span class="dot dot-danger"></span> CRITICAL';
-            } else if (data.is_warning) {
-                badge.className = 'status-badge status-warn';
-                dot.className = 'dot dot-warn';
-                badge.innerHTML = '<span class="dot dot-warn"></span> WARNING';
+                // GPU details
+                let details = '';
+                if (g.vram_used_mb !== undefined) details += `<div class="queue-row"><span class="queue-name">VRAM</span><span>${Math.round(g.vram_used_mb)}/${Math.round(g.vram_total_mb)} МБ</span></div>`;
+                if (g.temp_celsius !== undefined) details += `<div class="queue-row"><span class="queue-name">🌡️ Температура</span><span>${g.temp_celsius}°C</span></div>`;
+                if (g.freq_mhz !== undefined) details += `<div class="queue-row"><span class="queue-name">⚡ Частота</span><span>${g.freq_mhz} МГц</span></div>`;
+                if (g.gpu_percent !== undefined) details += `<div class="queue-row"><span class="queue-name">📈 Загрузка</span><span>${g.gpu_percent}%</span></div>`;
+                if (g.fan_rpm !== undefined) details += `<div class="queue-row"><span class="queue-name">🌀 Вентилятор</span><span>${g.fan_rpm} RPM</span></div>`;
+                document.getElementById('gpu-detail-box').innerHTML = details || '<div class="empty">Нет данных GPU</div>';
             } else {
-                badge.className = 'status-badge status-ok';
-                badge.innerHTML = '<span class="dot dot-ok"></span> ONLINE';
+                set('v-gpu', 'N/A'); set('s-gpu', 'Не обнаружена');
+                document.getElementById('gpu-detail-box').innerHTML = '<div class="empty">GPU не обнаружена</div>';
             }
 
+            // Badge
+            const b = document.getElementById('sys-badge');
+            if (d.is_critical) { b.className = 'badge badge-danger'; b.innerHTML = '<span class="dot dot-danger"></span> CRITICAL'; }
+            else if (d.is_warning) { b.className = 'badge badge-warn'; b.innerHTML = '<span class="dot dot-warn"></span> WARNING'; }
+            else { b.className = 'badge badge-ok'; b.innerHTML = '<span class="dot dot-ok"></span> ONLINE'; }
             document.getElementById('last-updated').textContent = 'Обновлено: ' + new Date().toLocaleTimeString('ru-RU');
         }
 
         async function updateQueues() {
-            const data = await fetchJSON('/api/queues');
-            const container = document.getElementById('queues-container');
-            if (!data || !data.connected) {
-                container.innerHTML = '<div class="empty-state">❌ Redis недоступен</div>';
-                return;
-            }
+            const d = await fj('/api/queues'); const c = document.getElementById('queues-box');
+            if (!d || !d.connected) { c.innerHTML = '<div class="empty">❌ Redis недоступен</div>'; return; }
             const icons = { CRITICAL: '🔴', EXPORT: '🟡', INTERNAL: '🔵' };
-            container.innerHTML = Object.entries(data.queues).map(([name, count]) => `
-                <div class="queue-row">
-                    <span class="queue-name">${icons[name] || '⬜'} ${name}</span>
-                    <span class="queue-count">${count}</span>
-                </div>
-            `).join('');
+            c.innerHTML = Object.entries(d.queues).map(([n, v]) => `<div class="queue-row"><span class="queue-name">${icons[n] || '⬜'} ${n}</span><span class="queue-count">${v}</span></div>`).join('');
         }
 
         async function updateModels() {
-            const data = await fetchJSON('/api/models');
-            const container = document.getElementById('models-container');
-            if (!data || !data.connected) {
-                container.innerHTML = '<div class="empty-state">❌ Ollama недоступен</div>';
-                return;
-            }
-            if (data.models.length === 0) {
-                container.innerHTML = '<div class="empty-state">Нет моделей</div>';
-                return;
-            }
-            container.innerHTML = data.models.map(m => `
-                <div class="model-item">
-                    <span class="model-name"><span class="tag tag-model">${m.name.startsWith('genome-') ? 'ROLE' : 'BASE'}</span> ${m.name}</span>
-                    <span class="model-size">${m.size_gb} ГБ</span>
-                </div>
-            `).join('');
+            const d = await fj('/api/models'); const c = document.getElementById('models-box');
+            if (!d || !d.connected) { c.innerHTML = '<div class="empty">❌ Ollama недоступен</div>'; return; }
+            if (!d.models.length) { c.innerHTML = '<div class="empty">Нет моделей</div>'; return; }
+            c.innerHTML = d.models.map(m => `<div class="model-item"><span class="model-name"><span class="tag tag-model">${m.name.startsWith('genome-') ? 'ROLE' : 'BASE'}</span> ${m.name}</span><span class="model-size">${m.size_gb} ГБ</span></div>`).join('');
         }
 
         async function updateLogs() {
-            const data = await fetchJSON('/api/logs');
-            if (!data) return;
-
-            // Tasks
-            const tasksBody = document.getElementById('tasks-table');
-            if (data.tasks.length === 0) {
-                tasksBody.innerHTML = '<tr><td colspan="6" class="empty-state">Нет задач</td></tr>';
-            } else {
-                tasksBody.innerHTML = data.tasks.map(t => {
-                    const isOk = t.event === 'task_completed';
-                    return `<tr>
-                        <td>${formatTime(t.timestamp)}</td>
-                        <td><code>${t.task_id || '—'}</code></td>
-                        <td>${t.role ? `<span class="tag tag-role">${t.role}</span>` : '—'}</td>
-                        <td><span class="tag ${isOk ? 'tag-success' : 'tag-error'}">${isOk ? '✅ OK' : '❌ FAIL'}</span></td>
-                        <td>${t.duration_sec ? t.duration_sec.toFixed(1) + 's' : '—'}</td>
-                        <td>${t.cost ? t.cost.toFixed(1) + ' U' : '—'}</td>
-                    </tr>`;
-                }).join('');
-            }
-
-            // Incidents
-            const incBody = document.getElementById('incidents-table');
-            if (data.incidents.length === 0) {
-                incBody.innerHTML = '<tr><td colspan="3" class="empty-state">Нет инцидентов — всё спокойно 🟢</td></tr>';
-            } else {
-                incBody.innerHTML = data.incidents.map(i => `
-                    <tr>
-                        <td>${formatTime(i.timestamp)}</td>
-                        <td><span class="tag tag-error">${i.event || '—'}</span></td>
-                        <td>${i.error || i.summary || JSON.stringify(i).substring(0, 100)}</td>
-                    </tr>
-                `).join('');
-            }
+            const d = await fj('/api/logs'); if (!d) return;
+            const tb = document.getElementById('tasks-tb');
+            if (!d.tasks.length) { tb.innerHTML = '<tr><td colspan="6" class="empty">Нет задач</td></tr>'; }
+            else { tb.innerHTML = d.tasks.map(t => { const ok = t.event === 'task_completed'; return `<tr><td>${ft(t.timestamp)}</td><td><code style="font-size:11px">${t.task_id || '—'}</code></td><td>${t.role ? `<span class="tag tag-role">${t.role}</span>` : '—'}</td><td><span class="tag ${ok ? 'tag-ok' : 'tag-err'}">${ok ? '✅ OK' : '❌ FAIL'}</span></td><td>${t.duration_sec ? t.duration_sec.toFixed(1) + 's' : '—'}</td><td>${t.cost ? t.cost.toFixed(1) + ' U' : '—'}</td></tr>` }).join(''); }
+            const ib = document.getElementById('inc-tb');
+            if (!d.incidents.length) { ib.innerHTML = '<tr><td colspan="3" class="empty">Нет инцидентов — всё спокойно 🟢</td></tr>'; }
+            else { ib.innerHTML = d.incidents.map(i => `<tr><td>${ft(i.timestamp)}</td><td><span class="tag tag-err">${i.event || '—'}</span></td><td>${i.error || i.summary || JSON.stringify(i).substring(0, 80)}</td></tr>`).join(''); }
         }
 
-        async function refresh() {
-            await Promise.all([updateStatus(), updateQueues(), updateModels(), updateLogs()]);
+        async function submitTask() {
+            const btn = document.getElementById('task-submit'); const res = document.getElementById('task-result');
+            btn.disabled = true; res.textContent = '⏳ Отправка...'; res.style.color = '';;
+            try {
+                let payload; try { payload = JSON.parse(document.getElementById('task-payload').value); } catch { payload = { message: document.getElementById('task-payload').value }; }
+                const resp = await fetch('/api/task', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type: document.getElementById('task-role').value, payload, priority: document.getElementById('task-priority').value })
+                });
+                const d = await resp.json();
+                if (d.success) { res.textContent = `✅ ${d.task_id} в очередь ${d.priority.toUpperCase()}`; res.style.color = 'var(--accent)'; setTimeout(refresh, 2000); }
+                else { res.textContent = '❌ ' + d.error; res.style.color = 'var(--danger)'; }
+            } catch (e) { res.textContent = '❌ ' + e; res.style.color = 'var(--danger)'; }
+            btn.disabled = false;
         }
 
-        refresh();
-        setInterval(refresh, 5000);
+        async function refresh() { await Promise.all([updateStatus(), updateQueues(), updateModels(), updateLogs()]); }
+        refresh(); setInterval(refresh, 5000);
     </script>
 </body>
+
 </html>

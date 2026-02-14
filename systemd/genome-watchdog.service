@@ -1,0 +1,19 @@
+[Unit]
+Description=ГЕНОМ Watchdog — Аппаратный предохранитель
+After=docker.service
+PartOf=genome-orchestrator.service
+
+[Service]
+Type=simple
+User=fedr
+WorkingDirectory=/home/fedr/openclaw/genome
+ExecStart=/usr/bin/python3 /home/fedr/openclaw/genome/run.py --watchdog
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=genome-watchdog
+Environment="PYTHONPATH=/home/fedr/openclaw/genome"
+
+[Install]
+WantedBy=multi-user.target

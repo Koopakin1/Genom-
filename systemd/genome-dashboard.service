@@ -1,0 +1,19 @@
+[Unit]
+Description=ГЕНОМ Dashboard — Веб-панель мониторинга
+After=docker.service network-online.target
+PartOf=genome-orchestrator.service
+
+[Service]
+Type=simple
+User=fedr
+WorkingDirectory=/home/fedr/openclaw/genome
+ExecStart=/usr/bin/python3 /home/fedr/openclaw/genome/dashboard.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=genome-dashboard
+Environment="PYTHONPATH=/home/fedr/openclaw/genome"
+
+[Install]
+WantedBy=multi-user.target
