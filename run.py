@@ -6,6 +6,8 @@ run.py — Единая точка входа для ГЕНОМ.
     python3 run.py               # Оркестратор (по умолчанию)
     python3 run.py --watchdog    # Watchdog-предохранитель
     python3 run.py --dashboard   # Веб-дэшборд (порт 8080)
+    python3 run.py --scheduler   # Планировщик автозадач
+    python3 run.py --notifier    # Telegram-уведомления
     python3 run.py --all         # Все компоненты в одном процессе
 """
 
@@ -44,6 +46,20 @@ def run_dashboard():
     server.serve_forever()
 
 
+def run_scheduler():
+    """Запустить Scheduler."""
+    from scheduler import Scheduler
+    sched = Scheduler()
+    sched.start()
+
+
+def run_notifier():
+    """Запустить Notifier."""
+    from notifier import Notifier
+    notif = Notifier()
+    notif.start()
+
+
 def run_all():
     """Запустить все компоненты в потоках."""
     import logging
@@ -55,15 +71,18 @@ def run_all():
     logger = logging.getLogger("genome.main")
     logger.info("🚀 Запуск ВСЕХ компонентов ГЕНОМ...")
 
-    # Watchdog — отдельный поток
-    wd = threading.Thread(target=run_watchdog, daemon=True, name="watchdog")
-    wd.start()
-    logger.info("🐕 Watchdog запущен")
+    daemons = [
+        ("watchdog", run_watchdog),
+        ("dashboard", run_dashboard),
+        ("scheduler", run_scheduler),
+        ("notifier", run_notifier),
+    ]
 
-    # Dashboard — отдельный поток
-    db = threading.Thread(target=run_dashboard, daemon=True, name="dashboard")
-    db.start()
-    logger.info("🖥️  Dashboard запущен")
+    for name, func in daemons:
+        t = threading.Thread(target=func, daemon=True, name=name)
+        t.start()
+        icons = {"watchdog": "🐕", "dashboard": "🖥️", "scheduler": "⏰", "notifier": "🔔"}
+        logger.info(f"{icons.get(name, '▶')}  {name} запущен")
 
     # Оркестратор — главный поток
     run_orchestrator()
@@ -74,14 +93,24 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--watchdog", action="store_true", help="Запустить Watchdog")
     group.add_argument("--dashboard", action="store_true", help="Запустить Dashboard")
+    group.add_argument("--scheduler", action="store_true", help="Запустить Scheduler")
+    group.add_argument("--notifier", action="store_true", help="Запустить Notifier")
     group.add_argument("--all", action="store_true", help="Все компоненты")
     args = parser.parse_args()
 
-    if args.watchdog:
-        run_watchdog()
-    elif args.dashboard:
-        run_dashboard()
-    elif args.all:
+    runners = {
+        "watchdog": run_watchdog,
+        "dashboard": run_dashboard,
+        "scheduler": run_scheduler,
+        "notifier": run_notifier,
+    }
+
+    for name, func in runners.items():
+        if getattr(args, name, False):
+            func()
+            sys.exit(0)
+
+    if args.all:
         run_all()
     else:
         run_orchestrator()

@@ -1,0 +1,20 @@
+[Unit]
+Description=ГЕНОМ Notifier — Telegram-уведомления
+After=docker.service
+PartOf=genome-orchestrator.service
+
+[Service]
+Type=simple
+User=fedr
+WorkingDirectory=/home/fedr/openclaw/genome
+ExecStart=/usr/bin/python3 /home/fedr/openclaw/genome/run.py --notifier
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=genome-notifier
+Environment="PYTHONPATH=/home/fedr/openclaw/genome"
+EnvironmentFile=/home/fedr/openclaw/genome/.env
+
+[Install]
+WantedBy=multi-user.target

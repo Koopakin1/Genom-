@@ -69,12 +69,12 @@ class Orchestrator:
             logger.error("❌ Ollama недоступен!")
             return
 
-        # Инициализация памяти
+        # Инициализация памяти (MemGPT: 3 уровня)
         try:
             await self.memory.initialize()
-            logger.info("✅ ChromaDB: память инициализирована")
+            logger.info("✅ Память: Core/Recall/Archival (MemGPT)")
         except Exception as e:
-            logger.warning(f"⚠️ ChromaDB: {e} (работаем без памяти)")
+            logger.warning(f"⚠️ Память: {e} (работаем без памяти)")
 
         snapshot = take_snapshot()
         logger.info(f"💻 CPU: {snapshot.cpu_percent}% | 🧠 RAM: {snapshot.ram_percent}%")
@@ -151,7 +151,13 @@ class Orchestrator:
             self._budget -= cost
             logger.info(f"✅ Выполнено за {result.duration_sec:.1f}с | Остаток: {self._budget:.1f}")
 
+            # MemGPT: сохраняем в recall + archival
             try:
+                self.memory.recall.append(
+                    "task_completed",
+                    f"{task.task_type} ({role.value}): {result.output[:200]}",
+                    {"task_id": task.task_id, "cost": cost, "duration": result.duration_sec},
+                )
                 await self.memory.store(MemoryEntry(
                     content=result.output[:500],
                     category="task_result",
@@ -214,10 +220,19 @@ class Orchestrator:
         return WorkerRole.SYSADMIN
 
     def _build_prompt(self, task: Task) -> str:
-        """Собрать промпт для ЖКХ."""
+        """Собрать промпт для ЖКХ (MemGPT virtual context)."""
+        # Виртуальный контекст: Core Memory + Recall Memory
+        context = ""
+        try:
+            context = self.memory.build_context(max_recall=3)
+        except Exception:
+            pass
+
         payload_str = json.dumps(task.payload, ensure_ascii=False, indent=2)
         return (
-            f"Задача #{task.task_id}\n"
+            f"{context}\n\n"
+            f"--- ЗАДАЧА ---\n"
+            f"ID: {task.task_id}\n"
             f"Тип: {task.task_type}\nПриоритет: {task.priority}\n"
             f"Данные:\n{payload_str}\n\n"
             f"Выполни задачу и верни JSON: "
