@@ -46,8 +46,8 @@ echo "🧠 [4/4] Загрузка моделей (это займёт время
 echo "   📥 Загрузка qwen2.5:1.5b (Администрация)..."
 docker exec genome-ollama ollama pull qwen2.5:1.5b
 
-echo "   📥 Загрузка llama3.2:3b (ЖКХ)..."
-docker exec genome-ollama ollama pull llama3.2:3b
+echo "   📥 Загрузка llama3.1:8b (ЖКХ)..."
+docker exec genome-ollama ollama pull llama3.1:8b
 
 echo ""
 echo "   📝 Регистрация Modelfile-ролей..."
@@ -62,7 +62,7 @@ for role in admin sysadmin auditor economist cleaner mchs; do
         else
             MODEL_NAME="genome-worker-${role}"
             # Заменяем 8b на 3b для экономии RAM (CPU-only)
-            sed -i 's/llama3.2:8b-instruct-q4_K_M/llama3.2:3b/g' "$MODELFILE" 2>/dev/null || true
+            sed -i 's/llama3.1:8b/llama3.1:8b/g' "$MODELFILE" 2>/dev/null || true
         fi
 
         # Копируем Modelfile в контейнер

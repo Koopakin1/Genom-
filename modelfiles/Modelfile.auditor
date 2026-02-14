@@ -1,5 +1,5 @@
 # ЖКХ: Auditor (Ревизор) — Проверка безопасности и качества
-FROM llama3.2:3b
+FROM llama3.1:8b
 
 PARAMETER temperature 0.1
 PARAMETER top_p 0.8

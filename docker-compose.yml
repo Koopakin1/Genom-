@@ -59,7 +59,6 @@ services:
       - /dev/dri:/dev/dri
     group_add:
       - video
-      - render
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:11434/" ]
