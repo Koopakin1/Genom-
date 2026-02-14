@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  # ==========================================
+  # Redis — Шина данных Города
+  # ==========================================
+  redis:
+    image: redis:7-alpine
+    container_name: genome-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # ==========================================
+  # ChromaDB — Библиотека (Vector DB)
+  # ==========================================
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: genome-chromadb
+    ports:
+      - "8100:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # ==========================================
+  # Ollama — Движок моделей (AMD ROCm GPU)
+  # ==========================================
+  ollama:
+    image: ollama/ollama:rocm
+    container_name: genome-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_NUM_PARALLEL=1
+      - OLLAMA_MAX_LOADED_MODELS=2
+      - OLLAMA_KEEP_ALIVE=10m
+      - HSA_OVERRIDE_GFX_VERSION=8.0.3
+    devices:
+      - /dev/kfd:/dev/kfd
+      - /dev/dri:/dev/dri
+    group_add:
+      - video
+      - render
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:11434/" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  redis_data:
+  chroma_data:
+  ollama_data:
